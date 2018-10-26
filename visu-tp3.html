@@ -9,21 +9,20 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <!-- D3JS-->
-	<script src="http://d3js.org/d3.v3.min.js"></script>
+	<script src="http://d3js.org/d3.v4.min.js"></script>
 
     <style>
 
-        .MyChart a {
-            background: #bde572;
-            padding: 4px;
-            border: 2px;
-            border-radius: 8px;
-        }
-
-        .MyChart text {
-            fill: black;
+        .MyTreeMap text {
+            fill: white;
             font: 10px sans-serif;
             text-anchor: begin;
+        }
+
+        .MyTreeMap rect {
+            fill: cadetblue;
+            opacity: 0.3;
+            stroke: white;
         }
 
         div.tooltip {
@@ -65,23 +64,23 @@
         <div class="tab-content">
 
             <!-- Reingold-Tilford -->
-            <div id="graph_reingold" class="tab-pane fade">
-
-            <div class="panel panel-default">
-                <div class="panel-heading"  style="padding: 8px;">
-                    <h4><strong>Reingold-Tilford</strong></h4>
-                </div>
-
-                <div class="panel-body">
-                    <div class="row" style="padding: 8px;">
-                        <!-- Le graphique est inséré ici -->
-                        <svg class="MyChart" id="svgchart" style="background-color: #B8B8B8;"></svg>
+            <div id="graph_reingold" class="tab-pane fade in active">
+                <div class="panel panel-default">
+                    <div class="panel-heading"  style="padding: 8px;">
+                        <h4><strong>Reingold-Tilford</strong></h4>
                     </div>
-                </div> <!--panel-body-->        </div>
+
+                    <div class="panel-body">
+                        <div class="row" style="padding: 8px;">
+                            <!-- Le graphique est inséré ici -->
+                            <svg class="MyChart" id="svgtree" style="background-color: #B8B8B8;"></svg>
+                        </div>
+                    </div> <!--panel-body-->
+                </div>
             </div> <!--tab-pane graphique 1 -->
 
             <!-- Treemap -->
-            <div id="graph_treemap" class="tab-pane fade in active">
+            <div id="graph_treemap" class="tab-pane fade">
                 <div class="panel panel-default">
                     <div class="panel-heading" style="padding: 8px;">
                         <h4><strong>Treemap</strong></h4>
@@ -89,7 +88,7 @@
                     <div class="panel-body">
                         <div class="row" style="padding: 8px;">
                             <!-- Le graphique est inséré ici -->
-                            <svg class="MyChart" id="svgchartmap" style="background-color: #B8B8B8;"></svg>
+                            <svg class="MyTreeMap" id="svgtreemap" style="background-color: #B8B8B8;"></svg>
                         </div>
                     </div> <!--panel-body-->
                 </div> <!--panel-->
@@ -98,7 +97,7 @@
     </div> <!-- container-fluid-->
 
     <!-- Chargement des scripts pour lire les données et tracer les graphiques -->
-    <!-- <script src="toto.js"></script> -->
+    <script src="treemap.js"></script>
 
     <noscript>Vous devez activer JavaScript sur votre navigateur pour voir cette page</noscript>
 </body>
