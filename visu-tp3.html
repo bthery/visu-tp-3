@@ -20,16 +20,16 @@
         }
 
         .MyTreeMap rect {
-            fill: cadetblue;
-            opacity: 0.3;
+            fill: #4594BF;
+            opacity: 0.2;
             stroke: white;
         }
 
         div.tooltip {
             position: absolute;
-            text-align: center;
-            width: 100px;
-            height: 48px;
+            text-align: left;
+            width: 150px;
+            height: 64px;
             padding: 2px;
             font: 11px sans-serif;
             background: white;
@@ -64,7 +64,7 @@
         <div class="tab-content">
 
             <!-- Reingold-Tilford -->
-            <div id="graph_reingold" class="tab-pane fade in active">
+            <div id="graph_reingold" class="tab-pane fade">
                 <div class="panel panel-default">
                     <div class="panel-heading"  style="padding: 8px;">
                         <h4><strong>Reingold-Tilford</strong></h4>
@@ -80,12 +80,16 @@
             </div> <!--tab-pane graphique 1 -->
 
             <!-- Treemap -->
-            <div id="graph_treemap" class="tab-pane fade">
+            <div id="graph_treemap" class="tab-pane fade in active">
                 <div class="panel panel-default">
                     <div class="panel-heading" style="padding: 8px;">
                         <h4><strong>Treemap</strong></h4>
                     </div>
-                    <div class="panel-body">
+                    <div id="graph_treemap_body" class="panel-body">
+                        <div class="btn-group" id="treemap-style-selector">
+                            <button type="button" class="btn btn-primary" id="subtree_size_button">Affichage par taille du sous-arbre</button>
+                            <button type="button" class="btn btn-primary" id="children_count_button">Affichage par nombre de fichiers du sous-arbre</button>
+                        </div>
                         <div class="row" style="padding: 8px;">
                             <!-- Le graphique est inséré ici -->
                             <svg class="MyTreeMap" id="svgtreemap" style="background-color: #B8B8B8;"></svg>
