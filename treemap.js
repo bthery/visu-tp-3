@@ -43,7 +43,7 @@ function drawTreemap(root) {
     }
 
     // Utilise la largeur maximale de l'element
-    svgWidth = document.getElementById('graph_treemap_body').offsetWidth - 40;
+    svgWidth = Math.max(document.getElementById('graph_treemap_body').offsetWidth - 40, svgWidth);
 
     // Ajout d'un div pour le tooltip
     var tooltip = d3.select("body").append("div")
@@ -210,6 +210,13 @@ $('#children_count_button').click(function() {
     console.log("Children count!");
     if (tmSum != SUM_BY_CHILDREN) {
         tmSum = SUM_BY_CHILDREN;
+        d3.select("#svgtreemap").selectAll("*").remove();
+        drawTreemap(tmRoot);
+    }
+});
+
+$('.nav-tabs a').on('shown.bs.tab', function(event) {
+    if ($(event.target).text() == "Treemap") {
         d3.select("#svgtreemap").selectAll("*").remove();
         drawTreemap(tmRoot);
     }
