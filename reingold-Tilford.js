@@ -8,6 +8,12 @@
 //    json to d3js: http://bl.ocks.org/d3noob/8329447
 //    D3.js Layout: https://d3indepth.com/layouts/
 
+const COLOR_FILE  = "#FF9900";
+const COLOR_DIR   = "#0099FF";
+const COLOR_LINK  = "#666666";
+const RADIUS_FILE = 4;
+const RADIUS_DIR  = 5;
+
 // read json
 d3.json("reingold-Tilford.json", function(error, treeData) {
   if (error) throw error;
@@ -65,15 +71,27 @@ d3.json("reingold-Tilford.json", function(error, treeData) {
     context.save();
     context.translate(width / 2, height / 2);
 
+    // draw links
     context.beginPath();
     links.forEach(drawLink);
-    context.strokeStyle = "#aaa";
+    context.strokeStyle = COLOR_LINK;
     context.stroke();
 
+    //draw file nodes
     context.beginPath();
-    nodes.forEach(drawNode);
+    nodes.forEach(drawFileNode);
+    context.fillStyle = COLOR_FILE;
     context.fill();
-    context.strokeStyle = "#fff";
+    context.strokeStyle = COLOR_LINK;
+    context.class = "arc"
+    context.stroke();
+
+    // draw directory nodes
+    context.beginPath();
+    nodes.forEach(drawDirNode);
+    context.fillStyle = COLOR_DIR;
+    context.fill();
+    context.strokeStyle = COLOR_LINK;
     context.class = "arc"
     context.stroke();
 
@@ -125,9 +143,18 @@ d3.json("reingold-Tilford.json", function(error, treeData) {
     context.lineTo(d.target.x, d.target.y);
   }
 
-  function drawNode(d) {
-    context.moveTo(d.x + 3, d.y);
-    context.arc(d.x, d.y, 3, 0, 2 * Math.PI);
+  function drawFileNode(d) {
+    if (d.data.type == "file") {
+      context.moveTo(d.x + RADIUS_FILE, d.y);
+      context.arc(d.x, d.y, RADIUS_FILE, 0, 2 * Math.PI);
+    }
+  }
+
+  function drawDirNode(d) {
+    if (d.data.type == "directory") {
+      context.moveTo(d.x + RADIUS_DIR, d.y);
+      context.arc(d.x, d.y, RADIUS_DIR, 0, 2 * Math.PI);
+    }
   }
 
   //build string representing path from the tree root to the node
@@ -155,7 +182,7 @@ d3.json("reingold-Tilford.json", function(error, treeData) {
         .style("left", (d3.event.pageX + 8) + "px")
         .style("top", (d3.event.pageY + 8) + "px");
     } else {
-      tooltip.transition().duration(200).style("opacity", 0.);
+      tooltip.transition().duration(100).style("opacity", 0.);
     }
   }
 
