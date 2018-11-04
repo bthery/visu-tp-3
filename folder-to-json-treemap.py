@@ -5,6 +5,7 @@ import json
 import sys
 
 def path_to_dict(path):
+    '''Cree une hierarchie de repertoires. Ne stocke pas les fichiers.'''
     d = {'name': os.path.basename(path)}
     if os.path.isdir(path):
         d['type'] = "directory"

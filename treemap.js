@@ -2,25 +2,29 @@
 //
 // Cécile Boukamel-Donnou / Benjamin Thery
 //
-//     Visualisation d'Arbre
+//     Visualisation d'Arbre : Treemap
 //
+// References:
+//    json to d3js: http://bl.ocks.org/d3noob/8329447
+//    D3.js Layout: https://d3indepth.com/layouts/
 
-var tmDebug = false;
+
+var tmDebug = true;
 var tmWithZoomPan = false;
 var tmSvgGroup = null;
+
 var tmRoot = null;
+var tmCurrentRoot = null;
 
 const SUM_BY_SIZE     = 0;
 const SUM_BY_CHILDREN = 1;
 
 var tmSum = SUM_BY_SIZE;
 
-// json to d3js: http://bl.ocks.org/d3noob/8329447
-// D3.js Layout: https://d3indepth.com/layouts/
 
 // Chargement du fichier .json contenant les données
 // load the external data
-d3.json("treeData.json", function(error, treeData) {
+d3.json("treemapData.json", function(error, treeData) {
     if (error) throw error;
 
     console.debug("Json loaded:" + treeData)
@@ -35,8 +39,12 @@ d3.json("treeData.json", function(error, treeData) {
 function drawTreemap(root) {
     console.debug("Draw treemap")
 
+    // Stocke la racine courante (utilisé pour le changement de style d'affichage)
+    tmCurrentRoot = root;
+
     var svgWidth = 800;
     var svgHeight = 500;
+
     var scaleFactor = 1;
     if (tmWithZoomPan) {
         scaleFactor = 2;
@@ -44,6 +52,9 @@ function drawTreemap(root) {
 
     // Utilise la largeur maximale de l'element
     svgWidth = Math.max(document.getElementById('graph_treemap_body').offsetWidth - 40, svgWidth);
+
+    // Calcule l'opacité des éléments en fonction de la profondeur maximum de l'arbre
+    var depthOpacity = 0.2 + (0.8 / root.height);
 
     // Ajout d'un div pour le tooltip
     var tooltip = d3.select("body").append("div")
@@ -56,6 +67,7 @@ function drawTreemap(root) {
         .paddingOuter(20)
         .paddingInner(4);
 
+    // Fonction de sum() qui permet differents types d'affichage
     root.sum(function(d) {
         switch(tmSum) {
             case SUM_BY_CHILDREN:
@@ -66,7 +78,7 @@ function drawTreemap(root) {
                 }
                 break;
             case SUM_BY_SIZE:
-                return d.size > 0 ? d.size : 1; // XXX: got NaN values in hierarchy if 0 is returned
+                return d.size > 0 ? d.size : 1;
                 break;
         }
     });
@@ -81,12 +93,8 @@ function drawTreemap(root) {
         .attr("height", svgHeight);
 
     // Creation d'un groupe qui contiendra tous les autres objets svg
-    // Utilise pour implementer le zoom/pan
+    // Utilisé pour implementer le zoom/pan
     tmSvgGroup = baseSvg.append("g")
-
-    tmSvgGroup.append("rect")
-        .attr("width", svgWidth * scaleFactor)
-        .attr("height", svgHeight * scaleFactor);
 
     nodes = tmSvgGroup.selectAll('g')
         .data(root.descendants())
@@ -97,46 +105,56 @@ function drawTreemap(root) {
     nodes.append('rect')
         .attr('width', function(d) { return d.x1 - d.x0; })
         .attr('height', function(d) { return d.y1 - d.y0; })
+        .attr("fill-opacity", depthOpacity)
+        .attr("stroke-opacity", depthOpacity * 2)
         .on("mouseover", function(d, i) {
-            d3.select(this).style("opacity", "1.0");
-            if (tmDebug)
-                console.log(d);
+            d3.select(this)
+                .attr("fill-opacity", "1.0")
+                .attr("stroke-opacity", "1.0");
+
             tooltip.transition()
                 .duration(200)
                 .style("opacity", 0.7);
-            var txt = "";
-            var lines = 0;
-            txt += "<strong>" + d.data.name + "</strong>";
+
+            var txt = "<strong>" + d.data.name + "</strong>";
             txt += "<br/>" + "Files: " + d.data.files;
-            lines += 2;
             switch(tmSum) {
                 case SUM_BY_SIZE:
                     txt += "<br/>" + "Files Size: " + bytesToHumanSize(d.data.size);
-                    lines += 1;
+                    txt += "<br/>" + "Subtree Size: " + bytesToHumanSize(d.value) + " (" + valueToPercentage(d) + "%)";
                     if (d.hasOwnProperty('children')) {
-                        txt += "<br/>" + "Subtree Size: " + bytesToHumanSize(d.value);
                         txt += "<br/>" + "Subdirectories: " + d.children.length;
-                        lines += 2;
                     }
                     break;
                 case SUM_BY_CHILDREN:
                     if (d.hasOwnProperty('children')) {
                         txt += "<br/>" + "Subdirectories: " + d.children.length;
-                        txt += "<br/>" + "Files in subtree: " + d.value;
-                        lines += 2;
                     }
+                    txt += "<br/>" + "Files in subtree: " + d.value + " (" + valueToPercentage(d) + "%)";
                     break;
             }
             tooltip.html(txt)
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY) + "px")
-                .style("height", (lines * 16));
         })
         .on("mouseout", function(d) {
-            d3.select(this).style("opacity", "0.2");
+            d3.select(this)
+                .attr("fill-opacity", depthOpacity)
+                .attr("stroke-opacity", depthOpacity * 2)
             tooltip.transition()
                 .duration(200)
                 .style("opacity", 0);
+        })
+        .on("click", function(d) {
+            if (tmDebug)
+                console.log(d);
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", 0);
+            d3.select("#svgtreemap").selectAll("*").remove();
+            tmCurrentRoot = d.copy()
+            console.log(tmCurrentRoot);
+            drawTreemap(tmCurrentRoot);
         });
 
     nodes.append('text')
@@ -144,7 +162,7 @@ function drawTreemap(root) {
         .attr('dy', 14)
         .text(function(d) {
             // Affiche les noms seulement si les rectangles sont assez grands
-            // Hack:
+            // A bit hackish
             const charWidth = 8;
             const charHeight = 16;
             var width = d.x1 - d.x0;
@@ -192,6 +210,11 @@ function bytesToHumanSize(bytes, decimals) {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
+// Retourne le pourcentage de la valeur de l'element par rapport a la valeur totale du sous-arbre
+function valueToPercentage(d) {
+    return parseFloat((d.value / tmCurrentRoot.value) * 100).toFixed(2);
+}
+
 //
 // Appelés quand les boutons de style sont cliqués
 //
@@ -201,7 +224,7 @@ $('#subtree_size_button').click(function() {
     if (tmSum != SUM_BY_SIZE) {
         tmSum = SUM_BY_SIZE;
         d3.select("#svgtreemap").selectAll("*").remove();
-        drawTreemap(tmRoot);
+        drawTreemap(tmCurrentRoot);
     }
 });
 
@@ -211,8 +234,16 @@ $('#children_count_button').click(function() {
     if (tmSum != SUM_BY_CHILDREN) {
         tmSum = SUM_BY_CHILDREN;
         d3.select("#svgtreemap").selectAll("*").remove();
-        drawTreemap(tmRoot);
+        drawTreemap(tmCurrentRoot);
     }
+});
+
+//
+// Retour a la racine de l'arbre
+//
+$('#root_button').click(function() {
+    d3.select("#svgtreemap").selectAll("*").remove();
+    drawTreemap(tmRoot);
 });
 
 $('.nav-tabs a').on('shown.bs.tab', function(event) {

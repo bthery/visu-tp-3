@@ -21,16 +21,13 @@
 
         .MyTreeMap rect {
             fill: #4594BF;
-            opacity: 0.2;
             stroke: white;
         }
 
         div.tooltip {
             position: absolute;
             text-align: left;
-            width: 150px;
-            height: 64px;
-            padding: 2px;
+            padding: 4px;
             font: 11px sans-serif;
             background: white;
             border: 0px;
@@ -58,7 +55,7 @@
 
         <ul class="nav nav-tabs">
             <li class="active"><a data-toggle="tab" href="#graph_reingold"><strong>Reingold-Tilford</strong></a></li>
-            <li><a data-toggle="tab" href="#graph_treemap"><strong>Treemap</strong></a></li>
+            <li><a data-toggle="tab" href="#graph_treemap" id="treemap_tab"><strong>Treemap</strong></a></li>
         </ul>
 
         <div class="tab-content">
@@ -90,9 +87,10 @@
                             <button type="button" class="btn btn-primary" id="subtree_size_button">Affichage par taille du sous-arbre</button>
                             <button type="button" class="btn btn-primary" id="children_count_button">Affichage par nombre de fichiers du sous-arbre</button>
                         </div>
+                        <button type="button" class="btn" id="root_button">Retour à la racine</button>
                         <div class="row" style="padding: 8px;">
                             <!-- Le graphique est inséré ici -->
-                            <svg class="MyTreeMap" id="svgtreemap" style="background-color: #B8B8B8;"></svg>
+                            <svg class="MyTreeMap" id="svgtreemap" style="background-color: #F0F0F0;"></svg>
                         </div>
                     </div> <!--panel-body-->
                 </div> <!--panel-->
