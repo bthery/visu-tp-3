@@ -1,110 +1,125 @@
 <!-- Visualisation des données : TP3. C.Boukamel-Donnou / B.Thery -->
 <html>
 <head>
-  <meta charset="utf-8">
+    <meta charset="utf-8">
 
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-  <!-- D3JS-->
-  <script src="http://d3js.org/d3.v4.min.js"></script>
+    <!-- D3JS-->
+  <script src="https://d3js.org/d3.v4.min.js"></script>
 
-  <style>
+    <style>
+        .jumbotron {
+            padding: 8px;
+        }
 
-    .MyTreeMap text {
-      fill: white;
-      font: 10px sans-serif;
-      text-anchor: begin;
-    }
+        .MyChart a {
+            background: #bde572;
+            padding: 4px;
+            border: 2px;
+            border-radius: 8px;
+        }
 
-    .MyTreeMap rect {
-      fill: #4594BF;
-      stroke: white;
-    }
+        .MyChart text {
+            fill: black;
+            font: 10px sans-serif;
+            text-anchor: begin;
+        }
 
-    div.tooltip {
-      position: absolute;
-      text-align: left;
-      padding: 4px;
-      font: 11px sans-serif;
-      background: white;
-      border: 0px;
-      border-radius: 8px;
-      pointer-events: none;
-    }
+        .MyTreeMap text {
+            fill: white;
+            font: 10px sans-serif;
+            text-anchor: begin;
+        }
 
-    .nav-tabs {
-      background-color: #bde572;
-    }
+        .MyTreeMap rect {
+            fill: #4594BF;
+            stroke: white;
+        }
 
-  </style>
+        div.tooltip {
+            position: absolute;
+            text-align: left;
+            padding: 4px;
+            font: 11px sans-serif;
+            background: white;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+        }
 
-  <title>Visualisation de données 2018-2019 TP3</title>
+        .nav-tabs {
+            background-color: #bde572;
+        }
+
+    </style>
+    <style src="reingold-Tilford.css"></style>
+    <title>Visualisation de données 2018-2019 TP3</title>
 
 </head>
 <body>
-  <div class="container-fluid">
+    <div class="container-fluid">
 
-    <div class="jumbotron text-center">
-      Mastère Big Data 2018-2019: Visualisation des données TP3</br>
-      Cécile Boukamel-Donnou / Benjamin Thery
-      <h2>Visualisation d'Arbre</h2>
-    </div>
-
-    <ul class="nav nav-tabs">
-      <li class="active"><a data-toggle="tab" href="#graph_reingold"><strong>Reingold-Tilford</strong></a></li>
-      <li><a data-toggle="tab" href="#graph_treemap" id="treemap_tab"><strong>Treemap</strong></a></li>
-    </ul>
-
-    <div class="tab-content">
-
-      <!-- Reingold-Tilford -->
-      <div id="graph_reingold" class="tab-pane fade in active">
-        <div class="panel panel-default">
-          <div class="panel-heading"  style="padding: 8px;">
-            <h4><strong>Reingold-Tilford</strong></h4>
-          </div>
-
-          <div class="panel-body">
-            <div class="row" style="padding: 8px;">
-              <!-- Le graphique est inséré ici -->
-              <svg class="MyChart" id="svgtree" style="background-color: #B8B8B8;"></svg>
-            </div>
-          </div> <!--panel-body-->
+        <div class="jumbotron text-center">
+            Mastère Big Data 2018-2019: Visualisation des données TP3</br>
+            Cécile Boukamel-Donnou / Benjamin Thery
+            <h3>Visualisation d'Arbre</h3>
         </div>
-      </div> <!--tab-pane graphique 1 -->
 
-      <!-- Treemap -->
-      <div id="graph_treemap" class="tab-pane fade">
-        <div class="panel panel-default">
-          <div class="panel-heading" style="padding: 8px;">
-            <h4><strong>Répertoire courant</strong> : <span id="path_label"></span></h4>
-          </div>
-          <div id="graph_treemap_body" class="panel-body">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#graph_reingold"><strong>Reingold-Tilford</strong></a></li>
+            <li><a data-toggle="tab" href="#graph_treemap" id="treemap_tab"><strong>Treemap</strong></a></li>
+        </ul>
 
-            <div class="btn-group" id="treemap-style-selector">
-              <button type="button" class="btn btn-primary" id="subtree_size_button">Affichage par taille du sous-arbre</button>
-              <button type="button" class="btn btn-primary" id="children_count_button">Affichage par nombre de fichiers du sous-arbre</button>
-            </div>
+        <div class="tab-content">
 
-            <button type="button" class="btn" id="root_button">Retour à la racine</button>
+            <!-- Reingold-Tilford -->
+            <div id="graph_reingold" class="tab-pane fade in active">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row" style="padding: 8px">
+                            <!-- Le graphique est inséré ici -->
+                            <!--svg class="MyChart" id="ReingoldTilford" style="background-color: #B8B8B8;"-->
+                            <canvas width="1000" height="800" id="reingoldTilford"></canvas>
+                            <!--/svg-->
+                        </div>
+                    </div> <!--panel-body-->
+                </div>
+            </div> <!--tab-pane graphique 1 -->
 
-            <div class="row" style="padding: 8px;">
-              <!-- Le graphique est inséré ici -->
-              <svg class="MyTreeMap" id="svgtreemap" style="background-color: #F0F0F0;"></svg>
-            </div>
+            <!-- Treemap -->
+            <div id="graph_treemap" class="tab-pane fade">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="padding: 8px;">
+                        <h4><strong>Répertoire courant</strong> : <span id="path_label"></span></h4>
+                    </div>
+                    <div id="graph_treemap_body" class="panel-body">
 
-          </div> <!--panel-body-->
-        </div> <!--panel-->
-      </div> <!--tab-pane graphique 2-->
-    </div> <!--tab-content -->
-  </div> <!-- container-fluid-->
+                        <div class="btn-group" id="treemap-style-selector">
+                            <button type="button" class="btn btn-primary" id="subtree_size_button">Affichage par taille du sous-arbre</button>
+                            <button type="button" class="btn btn-primary" id="children_count_button">Affichage par nombre de fichiers du sous-arbre</button>
+                        </div>
 
-  <!-- Chargement des scripts pour lire les données et tracer les graphiques -->
-  <script src="treemap.js"></script>
+                        <button type="button" class="btn" id="root_button">Retour à la racine</button>
 
-  <noscript>Vous devez activer JavaScript sur votre navigateur pour voir cette page</noscript>
+                        <div class="row" style="padding: 8px;">
+                            <!-- Le graphique est inséré ici -->
+                            <svg class="MyTreeMap" id="svgtreemap" style="background-color: #F0F0F0;"></svg>
+                        </div>
+
+                    </div> <!--panel-body-->
+                </div> <!--panel-->
+            </div> <!--tab-pane graphique 2-->
+        </div> <!--tab-content -->
+    </div> <!-- container-fluid-->
+
+    <!-- Chargement des scripts pour lire les données et tracer les graphiques -->
+    <script src="reingold-Tilford.js"></script>
+    <script src="treemap.js"></script>
+
+    <noscript>Vous devez activer JavaScript sur votre navigateur pour voir cette page</noscript>
 </body>
 </html>
