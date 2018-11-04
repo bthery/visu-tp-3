@@ -1,4 +1,12 @@
-
+// Mastère Big Data : Visualisation des données TP3
+//
+// Cécile Boukamel-Donnou / Benjamin Thery
+//
+//     Visualisation d'Arbre : Treemap
+//
+// References:
+//    json to d3js: http://bl.ocks.org/d3noob/8329447
+//    D3.js Layout: https://d3indepth.com/layouts/
 
 // read json
 d3.json("reingold-Tilford.json", function(error, treeData) {
