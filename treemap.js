@@ -32,6 +32,7 @@ d3.json("treemapData.json", function(error, treeData) {
     tmRoot = d3.hierarchy(treeData, function(d) {
         return d.children;
     });
+    showCurrentPath(tmRoot);
     drawTreemap(tmRoot);
 });
 
@@ -148,12 +149,14 @@ function drawTreemap(root) {
         .on("click", function(d) {
             if (tmDebug)
                 console.log(d);
+            if (d == tmCurrentRoot)
+                return;
             tooltip.transition()
                 .duration(200)
                 .style("opacity", 0);
             d3.select("#svgtreemap").selectAll("*").remove();
+            showCurrentPath(d);
             tmCurrentRoot = d.copy()
-            console.log(tmCurrentRoot);
             drawTreemap(tmCurrentRoot);
         });
 
@@ -215,6 +218,28 @@ function valueToPercentage(d) {
     return parseFloat((d.value / tmCurrentRoot.value) * 100).toFixed(2);
 }
 
+// Retourne le chemin depuis la racine du sous-arbre jusqu'a l'element
+function getPath(d) {
+    var path = d.data.name;
+    var parent = d.parent;
+    while (parent) {
+        if (parent.parent) {
+            // Root is already in path
+            path = parent.data.name + "/" + path;
+        }
+        parent = parent.parent;
+    }
+    return path;
+}
+
+// Affiche sur la page le chemin vers l'element courant
+function showCurrentPath(d) {
+    if (d == tmRoot)
+        $('#path_label').text(getPath(d));
+    else
+        $('#path_label').text($('#path_label').text() + "/" + getPath(d));
+}
+
 //
 // Appelés quand les boutons de style sont cliqués
 //
@@ -238,17 +263,19 @@ $('#children_count_button').click(function() {
     }
 });
 
-//
 // Retour a la racine de l'arbre
-//
 $('#root_button').click(function() {
+    if (tmCurrentRoot == tmRoot)
+        return;
     d3.select("#svgtreemap").selectAll("*").remove();
+    showCurrentPath(tmRoot);
     drawTreemap(tmRoot);
 });
 
 $('.nav-tabs a').on('shown.bs.tab', function(event) {
     if ($(event.target).text() == "Treemap") {
         d3.select("#svgtreemap").selectAll("*").remove();
+        showCurrentPath(tmRoot);
         drawTreemap(tmRoot);
     }
 });

@@ -80,18 +80,22 @@
             <div id="graph_treemap" class="tab-pane fade">
                 <div class="panel panel-default">
                     <div class="panel-heading" style="padding: 8px;">
-                        <h4><strong>Treemap</strong></h4>
+                        <h4><strong>Répertoire courant</strong> : <span id="path_label"></span></h4>
                     </div>
                     <div id="graph_treemap_body" class="panel-body">
+
                         <div class="btn-group" id="treemap-style-selector">
                             <button type="button" class="btn btn-primary" id="subtree_size_button">Affichage par taille du sous-arbre</button>
                             <button type="button" class="btn btn-primary" id="children_count_button">Affichage par nombre de fichiers du sous-arbre</button>
                         </div>
+
                         <button type="button" class="btn" id="root_button">Retour à la racine</button>
+
                         <div class="row" style="padding: 8px;">
                             <!-- Le graphique est inséré ici -->
                             <svg class="MyTreeMap" id="svgtreemap" style="background-color: #F0F0F0;"></svg>
                         </div>
+
                     </div> <!--panel-body-->
                 </div> <!--panel-->
             </div> <!--tab-pane graphique 2-->
