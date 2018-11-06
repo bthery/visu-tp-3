@@ -109,7 +109,21 @@
                             <!-- Le graphique est inséré ici -->
                             <svg class="MyTreeMap" id="svgtreemap" style="background-color: #F0F0F0;"></svg>
                         </div>
-
+                        <p>Affichage de l'arborescence des sources du noyau Linux sous forme de <strong>treemap.</strong> Seuls les répertoires sont représentés par les boites du treemap pour un soucis de performance.</p>
+                        <p>Deux modes de représentation sont possibles pour l'arbre:
+                            <ul>
+                                <li><strong>par taille</strong>, la taille de boites du treemap est proportionnelle à la place occupée sur le disque par les différents répertoires du sous-arbre.</li>
+                                <li><strong>par nombre de fichiers</strong>, la taille de boites du treemap est proportionnelle à nombre de fichiers présents dans le sous-arbre.</li>
+                            </ul>
+                        </p>
+                        <p>Lorsque le pointeur de la souris est déplacé sur une boite, le sous-arbre est mis en valeur et un tooltip affiche différentes informations sur ce sous-arbres (selon le mode d'affichage):
+                             <ul>
+                                <li>nombres de fichiers dans le répertoire courant et dans son sous-arbre,</li>
+                                <li>taille des fichiers du répertoire courant et dans son sous-arbre,</li>
+                                <li>pourcentage de l'espace utilisé par le sous-arbre par rapport à l'espace totale de l'arbre affiché (et respectivement pourcentage des fichiers)</li>
+                            </ul>
+                        </p>
+                        <p>Il est possible de zoomer sur un sous-arbre en cliquant dans sa boite pour afficher des données qui ne sont pas forcément visible dans la vue d'ensemble.</p>
                     </div> <!--panel-body-->
                 </div> <!--panel-->
             </div> <!--tab-pane graphique 2-->

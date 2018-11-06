@@ -52,7 +52,7 @@ function drawTreemap(root) {
     }
 
     // Utilise la largeur maximale de l'element
-    svgWidth = Math.max(document.getElementById('graph_treemap_body').offsetWidth - 40, svgWidth);
+    svgWidth = Math.min(Math.max(document.getElementById('graph_treemap_body').offsetWidth - 40, svgWidth), 1000);
 
     // Calcule l'opacité des éléments en fonction de la profondeur maximum de l'arbre
     var depthOpacity = 0.2 + (0.8 / root.height);
