@@ -152,8 +152,9 @@ d3.json("reingold-Tilford.json", function(error, treeData) {
 
   function drawDirNode(d) {
     if (d.data.type == "directory") {
-      context.moveTo(d.x + RADIUS_DIR, d.y);
-      context.arc(d.x, d.y, RADIUS_DIR, 0, 2 * Math.PI);
+      var radius = d != root ? RADIUS_DIR : RADIUS_DIR * 2;
+      context.moveTo(d.x + radius, d.y);
+      context.arc(d.x, d.y, radius, 0, 2 * Math.PI);
     }
   }
 
